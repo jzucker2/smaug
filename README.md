@@ -1,3 +1,5 @@
 # smaug
 
-Simple home automation template
+Simple home automation template.
+
+Fill out with some details.
