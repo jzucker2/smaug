@@ -4,7 +4,7 @@ SCRIPTS_DIR=scripts
 PI_SCRIPTS_DIR=${SCRIPTS_DIR}/pi
 
 STEPS=2
-echo "Install gerlack in ${STEPS} steps!"
+echo "Install smaug in ${STEPS} steps!"
 
 echo "[1/${STEPS}] check git status"
 git status
@@ -12,7 +12,7 @@ git status
 echo "[2/${STEPS}] install docker"
 sh ${PI_SCRIPTS_DIR}/docker_install.sh
 
-echo "Done installing Gerlack with all ${STEPS} steps!!!"
+echo "Done installing Smaug with all ${STEPS} steps!!!"
 echo "Don't forget about ventura monitoring!"
 echo "Still need to log in to docker, and bring up containers ..."
 

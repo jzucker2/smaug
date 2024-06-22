@@ -6,7 +6,7 @@ SCRIPTS_DIR=scripts
 NUMBER_STEPS=6
 
 
-echo "Set up all gerlack apps with SCRIPTS_DIR: ${SCRIPTS_DIR} in ${NUMBER_STEPS} steps !"
+echo "Set up all smaug apps with SCRIPTS_DIR: ${SCRIPTS_DIR} in ${NUMBER_STEPS} steps !"
 
 echo "[1/${NUMBER_STEPS}] check git branch"
 git status
@@ -26,6 +26,6 @@ sh ${SCRIPTS_DIR}/postgres_setup.sh
 echo "[6/${STEPS}] set up zigbee2mqtt"
 sh ${SCRIPTS_DIR}/zigbee2mqtt_setup.sh
 
-echo "Done setting up all glados for this host at final SCRIPTS_DIR: ${SCRIPTS_DIR} in ${NUMBER_STEPS} steps !!!"
+echo "Done setting up all smaug for this host at final SCRIPTS_DIR: ${SCRIPTS_DIR} in ${NUMBER_STEPS} steps !!!"
 #echo "Now reboot!"
 #sudo reboot
