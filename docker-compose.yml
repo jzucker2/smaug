@@ -1,0 +1,224 @@
+services:
+
+  home-assistant:
+    container_name: home-assistant
+    labels:
+      - wud.tag.include=${WUD_SEMVAR_INCLUDE_LABEL}
+      - wud.link.template=https://github.com/home-assistant/core/releases/tag/$${major}.$${minor}.$${patch}
+    image: ghcr.io/home-assistant/home-assistant:${HOME_ASSISTANT_TAG}
+    volumes:
+#      - /PATH_TO_YOUR_CONFIG:/config
+      - ${DATADIR}/home_assistant/config:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/dbus/:/var/run/dbus/:z
+    restart: unless-stopped
+    healthcheck:
+      # FIXME: need to import .env to actual host environment in order for this to be dynamic!
+      test: ["CMD-SHELL", "curl -f \"http://${DOCKER_LOCALHOST}:${HOME_ASSISTANT_EXTERNAL_PORT}/manifest.json\" || exit 1"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+    extra_hosts:
+      - "${DOCKER_LOCALHOST}:host-gateway"
+    depends_on:
+      home-assistant-postgres:
+        condition: service_healthy
+    privileged: true
+    network_mode: host
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - POSTGRES_CONNECTION=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DOCKER_LOCALHOST}:${POSTGRES_EXTERNAL_PORT}/${POSTGRES_DEFAULT_DB}
+      # https://github.com/home-assistant/core/issues/105768
+      # https://www.home-assistant.io/installation/alternative#optimizations
+      - DISABLE_JEMALLOC=true
+
+  home-assistant-postgres:
+    container_name: home-assistant-postgres
+    labels:
+      - wud.tag.include=${WUD_LINUX_BASE_MINOR_SEMVAR_INCLUDE_LABEL}
+      - wud.link.template=https://www.postgresql.org/docs/release/$${major}.$${minor}/
+    image: postgres:${POSTGRES_TAG}
+    restart: always
+    # https://stackoverflow.com/questions/65115627/safe-ways-to-specify-postgres-parameters-for-healthchecks-in-docker-compose
+    healthcheck:
+      # FIXME: need to import .env to actual host environment in order for this to be dynamic!
+      # FIXME: I think this is causing errors
+#      test: [ "CMD-SHELL", "pg_isready", "-U", "portal", "-d", "${POSTGRES_DEFAULT_DB}" ]
+      test: [ "CMD-SHELL", "pg_isready -d ${POSTGRES_DEFAULT_DB} -U ${POSTGRES_USER}"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+    extra_hosts:
+      - "${DOCKER_LOCALHOST}:host-gateway"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DEFAULT_DB}
+    ports:
+      - ${POSTGRES_EXTERNAL_PORT}:5432
+    volumes:
+      - home-assistant-pgdata:/var/lib/postgresql/data
+
+  postgres-exporter:
+    container_name: postgres-exporter
+    labels:
+      - wud.tag.include=${WUD_VERSION_SEMVAR_INCLUDE_LABEL}
+      - wud.link.template=https://github.com/prometheus-community/postgres_exporter/releases/tag/v$${major}.$${minor}.$${patch}
+    image: quay.io/prometheuscommunity/postgres-exporter:${POSTGRES_EXPORTER_TAG}
+    restart: always
+    depends_on:
+      home-assistant-postgres:
+        condition: service_healthy
+    extra_hosts:
+      - "${DOCKER_LOCALHOST}:host-gateway"
+    ports:
+      - ${POSTGRES_EXPORTER_EXTERNAL_PORT}:9187
+    environment:
+      - DATA_SOURCE_USER=${POSTGRES_USER}
+      - DATA_SOURCE_PASS=${POSTGRES_PASSWORD}
+      - DATA_SOURCE_URI=${DOCKER_LOCALHOST}:${POSTGRES_EXTERNAL_PORT}/${POSTGRES_DEFAULT_DB}?sslmode=disable
+
+  mosquitto:
+    container_name: mosquitto
+    labels:
+      - wud.tag.include=${WUD_SEMVAR_INCLUDE_LABEL}
+      - wud.link.template=https://mosquitto.org/ChangeLog.txt
+    image: eclipse-mosquitto:${MOSQUITTO_TAG}
+    restart: always
+    healthcheck:
+      # FIXME: need to import .env to actual host environment in order for this to be dynamic!
+#      test: [ "CMD-SHELL", "mosquitto_sub -u hass -P raspberry -t '$$SYS/#' -C 1 -i healthcheck1 -W 3 || exit 1" ]
+      test: [ "CMD-SHELL", "mosquitto_sub -u ${MOSQUITTO_USER} -P ${MOSQUITTO_PASSWORD} -t '$$SYS/#' -C 1 -i healthcheck1 -W 3 || exit 1" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+    extra_hosts:
+      - "${DOCKER_LOCALHOST}:host-gateway"
+    ports:
+      - ${MOSQUITTO_EXTERNAL_PORT}:1883
+      - "9001:9001"  # not sure I'm even using this port
+    volumes:
+      - ${DATADIR}/mosquitto/config:/mosquitto/config
+      - ${DATADIR}/mosquitto/data:/mosquitto/data
+      - ${DATADIR}/mosquitto/log:/mosquitto/log
+
+  mosquitto-exporter:
+    container_name: mosquitto-exporter
+    labels:
+      - wud.tag.include=${WUD_VERSION_SEMVAR_INCLUDE_LABEL}
+      - wud.link.template=https://github.com/nolte/mosquitto-exporter/releases/tag/v$${major}.$${minor}.$${patch}
+    image: nolte/mosquitto-exporter:${MOSQUITTO_EXPORTER_TAG}
+    restart: always
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+    extra_hosts:
+      - "${DOCKER_LOCALHOST}:host-gateway"
+    ports:
+      - ${MOSQUITTO_EXPORTER_EXTERNAL_PORT}:9234
+    command:
+      - '--endpoint=tcp://${DOCKER_LOCALHOST}:${MOSQUITTO_EXTERNAL_PORT}'
+      - '--user=${MOSQUITTO_USER}'
+      - '--pass=${MOSQUITTO_PASSWORD}'
+
+  # for healthchecks: https://github.com/Koenkk/zigbee2mqtt/issues/1310
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    image: koenkk/zigbee2mqtt:${ZIGBEE2MQTT_TAG}
+    labels:
+      - wud.tag.include=${WUD_SEMVAR_INCLUDE_LABEL}
+      - wud.link.template=https://github.com/Koenkk/zigbee2mqtt/releases/tag/$${major}.$${minor}.$${patch}
+    restart: unless-stopped
+    extra_hosts:
+      - "${DOCKER_LOCALHOST}:host-gateway"
+    links:
+      - mosquitto:mosquitto
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+    volumes:
+      - ${DATADIR}/zigbee2mqtt/config:/app/data
+      - /run/udev:/run/udev:ro
+    ports:
+      - ${ZIGBEE2MQTT_EXTERNAL_PORT}:8080
+    environment:
+      - TZ=${TZ}
+      - ZIGBEE2MQTT_CONFIG_PERMIT_JOIN=${ZIGBEE2MQTT_PERMIT_JOIN}
+      - ZIGBEE2MQTT_CONFIG_MQTT_SERVER=${ZIGBEE2MQTT_MQTT_SERVER}
+      - ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC=${ZIGBEE2MQTT_BASE_TOPIC}
+#      - ZIGBEE2MQTT_CONFIG_ADVANCED_CHANNEL=${ZIGBEE2MQTT_ZIGBEE_CHANNEL}
+      - ZIGBEE2MQTT_CONFIG_MQTT_USER=${MOSQUITTO_USER}
+      - ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD=${MOSQUITTO_PASSWORD}
+      - ZIGBEE2MQTT_CONFIG_MQTT_CLIENT_ID=${ZIGBEE2MQTT_CONFIG_MQTT_CLIENT_ID}
+      - ZIGBEE2MQTT_CONFIG_SERIAL_PORT=${ZIGBEE_USB_DONGLE_PORT}
+      - ZIGBEE2MQTT_CONFIG_FRONTEND_URL=${ZIGBEE2MQTT_DEVICE_DESC_URL}
+    devices:
+      - ${ZIGBEE_USB_DONGLE_PORT}:${ZIGBEE_USB_DONGLE_PORT}
+      - ${ZIGBEE_USB_DONGLE_PORT}:/dev/ttyUSB0
+
+  node-red:
+    container_name: node-red
+    image: nodered/node-red:${NODE_RED_TAG}
+    labels:
+      - wud.tag.include=${WUD_SEMVAR_INCLUDE_LABEL}
+      - wud.link.template=https://github.com/node-red/node-red/releases/tag/$${major}.$${minor}.$${patch}
+    restart: unless-stopped
+    # TODO: need to set up the dag first
+#    healthcheck:
+#      # FIXME: need to import .env to actual host environment in order for this to be dynamic!
+##      test: [ "CMD-SHELL", "curl -f \"http://${DOCKER_LOCALHOST}:${NODE_RED_HEALTHCHECK_PORT}/ready\" || exit 1" ]
+#      test: [ "CMD-SHELL", "curl -f \"http://${DOCKER_LOCALHOST}:${NODE_RED_EXTERNAL_PORT}/v2/healthcheck\" || exit 1" ]
+#      interval: 30s
+#      timeout: 60s
+#      retries: 5
+#      start_period: 80s
+    depends_on:
+      home-assistant:
+        condition: service_healthy
+    extra_hosts:
+      - "${DOCKER_LOCALHOST}:host-gateway"
+    environment:
+      - TZ=${TZ}
+      - PROMETHEUS_COLLECT_DEFAULT_METRICS=true
+    ports:
+      - ${NODE_RED_EXTERNAL_PORT}:1880
+    volumes:
+      # flow data (settings file should already be there from the installation scripts)
+      - ${DATADIR}/node_red/config/:/data
+
+  # https://esphome.io/guides/getting_started_command_line.html
+  esphome:
+    image: ghcr.io/esphome/esphome:${ESPHOME_TAG}
+    container_name: esphome
+    labels:
+      - wud.tag.include=${WUD_SEMVAR_INCLUDE_LABEL}
+      - wud.link.template=https://github.com/esphome/esphome/releases/tag/$${major}.$${minor}.$${patch}
+    volumes:
+      - esphome-config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: always
+    healthcheck:
+      # FIXME: need to import .env to actual host environment in order for this to be dynamic!
+      test: [ "CMD-SHELL", "curl -f \"http://${DOCKER_LOCALHOST}:${ESPHOME_EXTERNAL_PORT}/ping\" || exit 1" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+    extra_hosts:
+      - "${DOCKER_LOCALHOST}:host-gateway"
+    privileged: true
+    network_mode: host
+    environment:
+      - USERNAME=${ESPHOME_USERNAME}
+      - PASSWORD=${ESPHOME_PASSWORD}
+
+volumes:
+  home-assistant-pgdata:
+    driver: local
+  esphome-config:
+    driver: local
