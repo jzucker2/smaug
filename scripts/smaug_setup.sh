@@ -20,9 +20,6 @@ sh ${SCRIPTS_DIR}/mqtt_setup.sh
 echo "[4/${STEPS}] set up node red"
 sh ${SCRIPTS_DIR}/node_red_setup.sh
 
-echo "[5/${STEPS}] set up postgres"
-sh ${SCRIPTS_DIR}/postgres_setup.sh
-
 echo "[6/${STEPS}] set up zigbee2mqtt"
 sh ${SCRIPTS_DIR}/zigbee2mqtt_setup.sh
 
