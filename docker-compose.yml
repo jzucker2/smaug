@@ -127,39 +127,39 @@ services:
       - '--pass=${MOSQUITTO_PASSWORD}'
 
   # for healthchecks: https://github.com/Koenkk/zigbee2mqtt/issues/1310
-  zigbee2mqtt:
-    container_name: zigbee2mqtt
-    image: koenkk/zigbee2mqtt:${ZIGBEE2MQTT_TAG}
-    labels:
-      - wud.tag.include=${WUD_SEMVAR_INCLUDE_LABEL}
-      - wud.link.template=https://github.com/Koenkk/zigbee2mqtt/releases/tag/$${major}.$${minor}.$${patch}
-    restart: unless-stopped
-    extra_hosts:
-      - "${DOCKER_LOCALHOST}:host-gateway"
-    links:
-      - mosquitto:mosquitto
-    depends_on:
-      mosquitto:
-        condition: service_healthy
-    volumes:
-      - ${DATADIR}/zigbee2mqtt/config:/app/data
-      - /run/udev:/run/udev:ro
-    ports:
-      - ${ZIGBEE2MQTT_EXTERNAL_PORT}:8080
-    environment:
-      - TZ=${TZ}
-      - ZIGBEE2MQTT_CONFIG_PERMIT_JOIN=${ZIGBEE2MQTT_PERMIT_JOIN}
-      - ZIGBEE2MQTT_CONFIG_MQTT_SERVER=${ZIGBEE2MQTT_MQTT_SERVER}
-      - ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC=${ZIGBEE2MQTT_BASE_TOPIC}
-#      - ZIGBEE2MQTT_CONFIG_ADVANCED_CHANNEL=${ZIGBEE2MQTT_ZIGBEE_CHANNEL}
-      - ZIGBEE2MQTT_CONFIG_MQTT_USER=${MOSQUITTO_USER}
-      - ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD=${MOSQUITTO_PASSWORD}
-      - ZIGBEE2MQTT_CONFIG_MQTT_CLIENT_ID=${ZIGBEE2MQTT_CONFIG_MQTT_CLIENT_ID}
-      - ZIGBEE2MQTT_CONFIG_SERIAL_PORT=${ZIGBEE_USB_DONGLE_PORT}
-      - ZIGBEE2MQTT_CONFIG_FRONTEND_URL=${ZIGBEE2MQTT_DEVICE_DESC_URL}
-    devices:
-      - ${ZIGBEE_USB_DONGLE_PORT}:${ZIGBEE_USB_DONGLE_PORT}
-      - ${ZIGBEE_USB_DONGLE_PORT}:/dev/ttyUSB0
+#  zigbee2mqtt:
+#    container_name: zigbee2mqtt
+#    image: koenkk/zigbee2mqtt:${ZIGBEE2MQTT_TAG}
+#    labels:
+#      - wud.tag.include=${WUD_SEMVAR_INCLUDE_LABEL}
+#      - wud.link.template=https://github.com/Koenkk/zigbee2mqtt/releases/tag/$${major}.$${minor}.$${patch}
+#    restart: unless-stopped
+#    extra_hosts:
+#      - "${DOCKER_LOCALHOST}:host-gateway"
+#    links:
+#      - mosquitto:mosquitto
+#    depends_on:
+#      mosquitto:
+#        condition: service_healthy
+#    volumes:
+#      - ${DATADIR}/zigbee2mqtt/config:/app/data
+#      - /run/udev:/run/udev:ro
+#    ports:
+#      - ${ZIGBEE2MQTT_EXTERNAL_PORT}:8080
+#    environment:
+#      - TZ=${TZ}
+#      - ZIGBEE2MQTT_CONFIG_PERMIT_JOIN=${ZIGBEE2MQTT_PERMIT_JOIN}
+#      - ZIGBEE2MQTT_CONFIG_MQTT_SERVER=${ZIGBEE2MQTT_MQTT_SERVER}
+#      - ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC=${ZIGBEE2MQTT_BASE_TOPIC}
+##      - ZIGBEE2MQTT_CONFIG_ADVANCED_CHANNEL=${ZIGBEE2MQTT_ZIGBEE_CHANNEL}
+#      - ZIGBEE2MQTT_CONFIG_MQTT_USER=${MOSQUITTO_USER}
+#      - ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD=${MOSQUITTO_PASSWORD}
+#      - ZIGBEE2MQTT_CONFIG_MQTT_CLIENT_ID=${ZIGBEE2MQTT_CONFIG_MQTT_CLIENT_ID}
+#      - ZIGBEE2MQTT_CONFIG_SERIAL_PORT=${ZIGBEE_USB_DONGLE_PORT}
+#      - ZIGBEE2MQTT_CONFIG_FRONTEND_URL=${ZIGBEE2MQTT_DEVICE_DESC_URL}
+#    devices:
+#      - ${ZIGBEE_USB_DONGLE_PORT}:${ZIGBEE_USB_DONGLE_PORT}
+#      - ${ZIGBEE_USB_DONGLE_PORT}:/dev/ttyUSB0
 
   node-red:
     container_name: node-red
