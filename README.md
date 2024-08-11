@@ -24,3 +24,11 @@ CADVISOR_EXTERNAL_PORT=8080
 NODE_EXPORTER_EXTERNAL_PORT=9100
 PROMTAIL_EXTERNAL_PORT=9080
 ```
+
+To set up small other things:
+
+```
+git config --global user.name "First Lastname"
+git config --global user.email "<email>@provider.com"
+git config --global credential.helper store
+```
