@@ -63,25 +63,6 @@ services:
     volumes:
       - home-assistant-pgdata:/var/lib/postgresql/data
 
-  postgres-exporter:
-    container_name: postgres-exporter
-    labels:
-      - wud.tag.include=${WUD_VERSION_SEMVAR_INCLUDE_LABEL}
-      - wud.link.template=https://github.com/prometheus-community/postgres_exporter/releases/tag/v$${major}.$${minor}.$${patch}
-    image: quay.io/prometheuscommunity/postgres-exporter:${POSTGRES_EXPORTER_TAG}
-    restart: always
-    depends_on:
-      home-assistant-postgres:
-        condition: service_healthy
-    extra_hosts:
-      - "${DOCKER_LOCALHOST}:host-gateway"
-    ports:
-      - ${POSTGRES_EXPORTER_EXTERNAL_PORT}:9187
-    environment:
-      - DATA_SOURCE_USER=${POSTGRES_USER}
-      - DATA_SOURCE_PASS=${POSTGRES_PASSWORD}
-      - DATA_SOURCE_URI=${DOCKER_LOCALHOST}:${POSTGRES_EXTERNAL_PORT}/${POSTGRES_DEFAULT_DB}?sslmode=disable
-
   mosquitto:
     container_name: mosquitto
     labels:
@@ -106,25 +87,6 @@ services:
       - ${DATADIR}/mosquitto/config:/mosquitto/config
       - ${DATADIR}/mosquitto/data:/mosquitto/data
       - ${DATADIR}/mosquitto/log:/mosquitto/log
-
-  mosquitto-exporter:
-    container_name: mosquitto-exporter
-    labels:
-      - wud.tag.include=${WUD_VERSION_SEMVAR_INCLUDE_LABEL}
-      - wud.link.template=https://github.com/nolte/mosquitto-exporter/releases/tag/v$${major}.$${minor}.$${patch}
-    image: nolte/mosquitto-exporter:${MOSQUITTO_EXPORTER_TAG}
-    restart: always
-    depends_on:
-      mosquitto:
-        condition: service_healthy
-    extra_hosts:
-      - "${DOCKER_LOCALHOST}:host-gateway"
-    ports:
-      - ${MOSQUITTO_EXPORTER_EXTERNAL_PORT}:9234
-    command:
-      - '--endpoint=tcp://${DOCKER_LOCALHOST}:${MOSQUITTO_EXTERNAL_PORT}'
-      - '--user=${MOSQUITTO_USER}'
-      - '--pass=${MOSQUITTO_PASSWORD}'
 
   # for healthchecks: https://github.com/Koenkk/zigbee2mqtt/issues/1310
 #  zigbee2mqtt:
