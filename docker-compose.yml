@@ -189,6 +189,30 @@ services:
       - USERNAME=${ESPHOME_USERNAME}
       - PASSWORD=${ESPHOME_PASSWORD}
 
+  pihole:
+    container_name: pihole
+    # TODO: need to update the WUD labels to include the leading `0` padding in the template or it fails
+    labels:
+      - wud.tag.include=${WUD_SEMVAR_INCLUDE_LABEL}
+      - wud.link.template=https://github.com/pi-hole/docker-pi-hole/releases/tag/$${major}.$${minor}.$${patch}
+    image: pihole/pihole:${PIHOLE_TAG}
+    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
+    network_mode: host
+    privileged: true
+    restart: unless-stopped
+    extra_hosts:
+      - "${DOCKER_LOCALHOST}:host-gateway"
+    environment:
+      - TZ=${TZ}
+      - WEBPASSWORD=${PIHOLE_PASSWORD}
+    # Volumes store your data between container upgrades
+    volumes:
+      - ${DATADIR}/pihole/config/etc-pihole:/etc/pihole
+      - ${DATADIR}/pihole/config/etc-dnsmasq.d:/etc/dnsmasq.d
+    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    cap_add:
+      - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+
 volumes:
   home-assistant-pgdata:
     driver: local
