@@ -9,6 +9,8 @@ services:
     volumes:
 #      - /PATH_TO_YOUR_CONFIG:/config
       - ${DATADIR}/home_assistant/config:/config
+#      - /PATH_TO_YOUR_MEDIA:/media
+      - ./media:/media
       - /etc/localtime:/etc/localtime:ro
       - /var/run/dbus/:/var/run/dbus/:z
     restart: unless-stopped
@@ -52,6 +54,7 @@ services:
       timeout: 60s
       retries: 5
       start_period: 80s
+#    user: ${POSTGRES_USER}
     extra_hosts:
       - "${DOCKER_LOCALHOST}:host-gateway"
     environment:
@@ -96,6 +99,14 @@ services:
       - wud.tag.include=${WUD_SEMVAR_INCLUDE_LABEL}
       - wud.link.template=https://github.com/Koenkk/zigbee2mqtt/releases/tag/$${major}.$${minor}.$${patch}
     restart: unless-stopped
+    healthcheck:
+      # FIXME: need to import .env to actual host environment in order for this to be dynamic!
+      #      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://10.0.1.131:8777/ || exit 1"]
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider \"http://${DOCKER_LOCALHOST}:${ZIGBEE2MQTT_EXTERNAL_PORT}/\" || exit 1" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
     extra_hosts:
       - "${DOCKER_LOCALHOST}:host-gateway"
     links:
@@ -130,15 +141,14 @@ services:
       - wud.tag.include=${WUD_SEMVAR_INCLUDE_LABEL}
       - wud.link.template=https://github.com/node-red/node-red/releases/tag/$${major}.$${minor}.$${patch}
     restart: unless-stopped
-    # TODO: need to set up the dag first
-#    healthcheck:
-#      # FIXME: need to import .env to actual host environment in order for this to be dynamic!
-##      test: [ "CMD-SHELL", "curl -f \"http://${DOCKER_LOCALHOST}:${NODE_RED_HEALTHCHECK_PORT}/ready\" || exit 1" ]
-#      test: [ "CMD-SHELL", "curl -f \"http://${DOCKER_LOCALHOST}:${NODE_RED_EXTERNAL_PORT}/v2/healthcheck\" || exit 1" ]
-#      interval: 30s
-#      timeout: 60s
-#      retries: 5
-#      start_period: 80s
+    healthcheck:
+      # FIXME: need to import .env to actual host environment in order for this to be dynamic!
+#      test: [ "CMD-SHELL", "curl -f \"http://${DOCKER_LOCALHOST}:${NODE_RED_HEALTHCHECK_PORT}/ready\" || exit 1" ]
+      test: [ "CMD-SHELL", "curl -f \"http://${DOCKER_LOCALHOST}:${NODE_RED_EXTERNAL_PORT}/v2/healthcheck\" || exit 1" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
     depends_on:
       home-assistant:
         condition: service_healthy
@@ -149,38 +159,12 @@ services:
       - PROMETHEUS_COLLECT_DEFAULT_METRICS=true
     ports:
       - ${NODE_RED_EXTERNAL_PORT}:1880
+#      - ${NODE_RED_HEALTHCHECK_PORT}:${NODE_RED_HEALTHCHECK_PORT}
     volumes:
       # flow data (settings file should already be there from the installation scripts)
       - ${DATADIR}/node_red/config/:/data
-
-  # https://esphome.io/guides/getting_started_command_line.html
-  esphome:
-    image: ghcr.io/esphome/esphome:${ESPHOME_TAG}
-    container_name: esphome
-    labels:
-      - wud.tag.include=${WUD_SEMVAR_INCLUDE_LABEL}
-      - wud.link.template=https://github.com/esphome/esphome/releases/tag/$${major}.$${minor}.$${patch}
-    volumes:
-      - esphome-config:/config
-      - /etc/localtime:/etc/localtime:ro
-    restart: always
-    healthcheck:
-      # FIXME: need to import .env to actual host environment in order for this to be dynamic!
-      test: [ "CMD-SHELL", "curl -f \"http://${DOCKER_LOCALHOST}:${ESPHOME_EXTERNAL_PORT}/ping\" || exit 1" ]
-      interval: 30s
-      timeout: 60s
-      retries: 5
-      start_period: 80s
-    extra_hosts:
-      - "${DOCKER_LOCALHOST}:host-gateway"
-    privileged: true
-    network_mode: host
-    environment:
-      - USERNAME=${ESPHOME_USERNAME}
-      - PASSWORD=${ESPHOME_PASSWORD}
+      # - ${DATADIR}/node_red/config/projects/.sshkeys:/usr/src/node-red/.ssh
 
 volumes:
   home-assistant-pgdata:
-    driver: local
-  esphome-config:
     driver: local
