@@ -10,7 +10,6 @@ services:
 #      - /PATH_TO_YOUR_CONFIG:/config
       - ${DATADIR}/home_assistant/config:/config
 #      - /PATH_TO_YOUR_MEDIA:/media
-      - ./media:/media
       - /etc/localtime:/etc/localtime:ro
       - /var/run/dbus/:/var/run/dbus/:z
     restart: unless-stopped
