@@ -139,14 +139,14 @@ services:
       - wud.tag.include=${WUD_SEMVAR_INCLUDE_LABEL}
       - wud.link.template=https://github.com/node-red/node-red/releases/tag/$${major}.$${minor}.$${patch}
     restart: unless-stopped
-    healthcheck:
-      # FIXME: need to import .env to actual host environment in order for this to be dynamic!
-#      test: [ "CMD-SHELL", "curl -f \"http://${DOCKER_LOCALHOST}:${NODE_RED_HEALTHCHECK_PORT}/ready\" || exit 1" ]
-      test: [ "CMD-SHELL", "curl -f \"http://${DOCKER_LOCALHOST}:${NODE_RED_EXTERNAL_PORT}/v2/healthcheck\" || exit 1" ]
-      interval: 30s
-      timeout: 60s
-      retries: 5
-      start_period: 80s
+#    healthcheck:
+#      # FIXME: need to import .env to actual host environment in order for this to be dynamic!
+##      test: [ "CMD-SHELL", "curl -f \"http://${DOCKER_LOCALHOST}:${NODE_RED_HEALTHCHECK_PORT}/ready\" || exit 1" ]
+#      test: [ "CMD-SHELL", "curl -f \"http://${DOCKER_LOCALHOST}:${NODE_RED_EXTERNAL_PORT}/v2/healthcheck\" || exit 1" ]
+#      interval: 30s
+#      timeout: 60s
+#      retries: 5
+#      start_period: 80s
     depends_on:
       home-assistant:
         condition: service_healthy
