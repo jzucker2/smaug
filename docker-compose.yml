@@ -163,32 +163,6 @@ services:
       - ${DATADIR}/node_red/config/:/data
       # - ${DATADIR}/node_red/config/projects/.sshkeys:/usr/src/node-red/.ssh
 
-  # https://esphome.io/guides/getting_started_command_line.html
-  esphome:
-    image: ghcr.io/esphome/esphome:${ESPHOME_TAG}
-    container_name: esphome
-    labels:
-      - wud.tag.include=${WUD_SEMVAR_INCLUDE_LABEL}
-      - wud.link.template=https://github.com/esphome/esphome/releases/tag/$${major}.$${minor}.$${patch}
-    volumes:
-      - esphome-config:/config
-      - /etc/localtime:/etc/localtime:ro
-    restart: always
-    healthcheck:
-      # FIXME: need to import .env to actual host environment in order for this to be dynamic!
-      test: [ "CMD-SHELL", "curl -f \"http://${DOCKER_LOCALHOST}:${ESPHOME_EXTERNAL_PORT}/ping\" || exit 1" ]
-      interval: 30s
-      timeout: 60s
-      retries: 5
-      start_period: 80s
-    extra_hosts:
-      - "${DOCKER_LOCALHOST}:host-gateway"
-    privileged: true
-    network_mode: host
-    environment:
-      - USERNAME=${ESPHOME_USERNAME}
-      - PASSWORD=${ESPHOME_PASSWORD}
-
   pihole:
     container_name: pihole
     # TODO: need to update the WUD labels to include the leading `0` padding in the template or it fails
@@ -215,6 +189,4 @@ services:
 
 volumes:
   home-assistant-pgdata:
-    driver: local
-  esphome-config:
     driver: local
