@@ -2,6 +2,10 @@
 
 Simple home automation template.
 
+```
+git clone https://github.com/jzucker2/smaug
+```
+
 Fill out with some details.
 
 To find your ethernet port:
