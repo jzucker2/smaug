@@ -50,6 +50,10 @@ DOCKER_LOCALHOST="host.docker.internal"
 # customize below for your db
 POSTGRES_USER=troy
 POSTGRES_PASSWORD=abed
+PIHOLE_PASSWORD=raspberry
+PIHOLE_API_TOKEN=secretaccesstoken
+MOSQUITTO_USER=hass
+MOSQUITTO_PASSWORD=raspberry
 HOME_ASSISTANT_EXTERNAL_PORT=8123
 POSTGRES_DEFAULT_DB=home_assistant
 POSTGRES_USER=foo
