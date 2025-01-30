@@ -4,9 +4,44 @@ Simple home automation template.
 
 Fill out with some details.
 
+To find your ethernet port:
+
+```
+ssh pi@smaug.local
+
+ifconfig -a
+
+...
+# This is your ethernet MAC address
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.0.1.104  netmask 255.255.255.0  broadcast 10.0.1.255
+        inet6 fdd0:63d:7f0:9841:803f:c97b:62dc:51a1  prefixlen 64  scopeid 0x0<global>
+        inet6 fe80::c546:17cc:71f2:6b0d  prefixlen 64  scopeid 0x20<link>
+        ether d8:3a:dd:da:d9:fd  txqueuelen 1000  (Ethernet)
+        RX packets 159854397  bytes 21035329577 (19.5 GiB)
+        RX errors 0  dropped 10328522  overruns 0  frame 0
+        TX packets 106616914  bytes 142169637766 (132.4 GiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 106
+...
+# This is your wifi MAC address
+wlan0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.0.1.103  netmask 255.255.255.0  broadcast 10.0.1.255
+        inet6 fe80::74ce:8281:938f:a37f  prefixlen 64  scopeid 0x20<link>
+        ether d8:3a:dd:da:d9:fe  txqueuelen 1000  (Ethernet)
+        RX packets 13075475  bytes 1929374840 (1.7 GiB)
+        RX errors 0  dropped 5024910  overruns 0  frame 0
+        TX packets 143792  bytes 14463907 (13.7 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+...
+```
+
 Need to create a file at `/etc/environment` containing the followinfg for health checks:
 
 ```
+# The SMAUG_DHCP_IP should be whatever your ethernet port is
+SMAUG_DHCP_IP=10.0.1.203
+ZIGBEE_USB_DONGLE_PORT=/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_fcdb20559e9ced11a9aa77faa7669f5d-if00-port0
 DOCKER_LOCALHOST="host.docker.internal"
 HOME_ASSISTANT_EXTERNAL_PORT=8123
 POSTGRES_DEFAULT_DB=home_assistant
@@ -58,12 +93,4 @@ pi@raspberrypi:~/smaug $ ls /dev/serial/by-id/
 usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_ec3eb69a8d9ded118264d1a5a7669f5d-if00-port0
 ```
 
-Then fill in `.env` like so:
-
-```yaml
-...
-ZIGBEE2MQTT_TAG=1.36.1
-ZIGBEE2MQTT_EXTERNAL_PORT=8777
-ZIGBEE_USB_DONGLE_PORT=/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_ec3eb69a8d9ded118264d1a5a7669f5d-if00-port0
-...
-```
+Then fill in `/etc/environment` and `sudo reboot` to restart and apply
