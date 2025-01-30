@@ -47,6 +47,9 @@ Need to create a file at `/etc/environment` containing the followinfg for health
 SMAUG_DHCP_IP=10.0.1.203
 ZIGBEE_USB_DONGLE_PORT=/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_fcdb20559e9ced11a9aa77faa7669f5d-if00-port0
 DOCKER_LOCALHOST="host.docker.internal"
+# customize below for your db
+POSTGRES_USER=troy
+POSTGRES_PASSWORD=abed
 HOME_ASSISTANT_EXTERNAL_PORT=8123
 POSTGRES_DEFAULT_DB=home_assistant
 POSTGRES_USER=foo
