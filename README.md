@@ -105,3 +105,11 @@ usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_ec3eb69a8d9ded118264d1a5a7669f5d-if0
 ```
 
 Then fill in `/etc/environment` and `sudo reboot` to restart and apply
+
+### Fan
+
+To set the fan:
+
+```
+sudo raspi-config
+```
