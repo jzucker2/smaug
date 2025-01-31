@@ -50,7 +50,7 @@ DOCKER_LOCALHOST="host.docker.internal"
 # customize below for your db
 POSTGRES_USER=posty
 POSTGRES_PASSWORD=postypass
-PIHOLE_PASSWORD=pipass
+PIHOLE_PASSWORD=pipassword
 PIHOLE_API_TOKEN=pisecretaccesstoken
 HOME_ASSISTANT_EXTERNAL_PORT=8123
 POSTGRES_DEFAULT_DB=home_assistant
