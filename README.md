@@ -18,24 +18,24 @@ ifconfig -a
 ...
 # This is your ethernet MAC address
 eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 10.0.1.104  netmask 255.255.255.0  broadcast 10.0.1.255
-        inet6 fdd0:63d:7f0:9841:803f:c97b:62dc:51a1  prefixlen 64  scopeid 0x0<global>
-        inet6 fe80::c546:17cc:71f2:6b0d  prefixlen 64  scopeid 0x20<link>
-        ether d8:3a:dd:da:d9:fd  txqueuelen 1000  (Ethernet)
-        RX packets 159854397  bytes 21035329577 (19.5 GiB)
-        RX errors 0  dropped 10328522  overruns 0  frame 0
-        TX packets 106616914  bytes 142169637766 (132.4 GiB)
+        inet 10.0.1.111  netmask 255.255.255.0  broadcast 10.0.1.255
+        inet6 fdd0:63d:7f0:9841:b604:9160:88a9:f1c7  prefixlen 64  scopeid 0x0<global>
+        inet6 fe80::ee3a:e170:88da:bfcd  prefixlen 64  scopeid 0x20<link>
+        ether d8:3a:dd:28:50:aa  txqueuelen 1000  (Ethernet)
+        RX packets 21416  bytes 7713281 (7.3 MiB)
+        RX errors 0  dropped 96  overruns 0  frame 0
+        TX packets 18523  bytes 2773762 (2.6 MiB)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 106
 ...
 # This is your wifi MAC address
 wlan0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 10.0.1.103  netmask 255.255.255.0  broadcast 10.0.1.255
-        inet6 fe80::74ce:8281:938f:a37f  prefixlen 64  scopeid 0x20<link>
-        ether d8:3a:dd:da:d9:fe  txqueuelen 1000  (Ethernet)
-        RX packets 13075475  bytes 1929374840 (1.7 GiB)
-        RX errors 0  dropped 5024910  overruns 0  frame 0
-        TX packets 143792  bytes 14463907 (13.7 MiB)
+        inet 10.0.1.112  netmask 255.255.255.0  broadcast 10.0.1.255
+        inet6 fdd0:63d:7f0:9841:9c07:f8ee:e96a:372e  prefixlen 64  scopeid 0x0<global>
+        inet6 fe80::7c6c:ad82:8d30:53fc  prefixlen 64  scopeid 0x20<link>
+        ether d8:3a:dd:28:50:ab  txqueuelen 1000  (Ethernet)
+        RX packets 7083  bytes 1105988 (1.0 MiB)
+        RX errors 0  dropped 1133  overruns 0  frame 0
+        TX packets 116  bytes 26942 (26.3 KiB)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ...
 ```
