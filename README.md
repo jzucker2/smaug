@@ -44,23 +44,20 @@ Need to create a file at `/etc/environment` containing the followinfg for health
 
 ```
 # The SMAUG_DHCP_IP should be whatever your ethernet port is
-SMAUG_DHCP_IP=10.0.1.203
+SMAUG_DHCP_IP=10.0.1.111
 ZIGBEE_USB_DONGLE_PORT=/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_fcdb20559e9ced11a9aa77faa7669f5d-if00-port0
 DOCKER_LOCALHOST="host.docker.internal"
 # customize below for your db
-POSTGRES_USER=troy
-POSTGRES_PASSWORD=abed
-PIHOLE_PASSWORD=raspberry
-PIHOLE_API_TOKEN=secretaccesstoken
-MOSQUITTO_USER=hass
-MOSQUITTO_PASSWORD=raspberry
+POSTGRES_USER=posty
+POSTGRES_PASSWORD=postypass
+PIHOLE_PASSWORD=pipass
+PIHOLE_API_TOKEN=pisecretaccesstoken
 HOME_ASSISTANT_EXTERNAL_PORT=8123
 POSTGRES_DEFAULT_DB=home_assistant
-POSTGRES_USER=foo
 MOSQUITTO_EXTERNAL_PORT=1883
 MOSQUITTO_EXPORTER_EXTERNAL_PORT=9234
 MOSQUITTO_USER=hass
-MOSQUITTO_PASSWORD=raspberry
+MOSQUITTO_PASSWORD=hasspass
 ZIGBEE2MQTT_EXTERNAL_PORT=8777
 NODE_RED_EXTERNAL_PORT=1880
 NODE_RED_HEALTHCHECK_PORT=1881
