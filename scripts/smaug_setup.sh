@@ -23,6 +23,9 @@ sh ${SCRIPTS_DIR}/node_red_setup.sh
 echo "[6/${STEPS}] set up zigbee2mqtt"
 sh ${SCRIPTS_DIR}/zigbee2mqtt_setup.sh
 
+echo "[7/${STEPS}] set up pihole"
+sh ${SCRIPTS_DIR}/pihole_setup.sh
+
 echo "Done setting up all smaug for this host at final SCRIPTS_DIR: ${SCRIPTS_DIR} in ${NUMBER_STEPS} steps !!!"
 #echo "Now reboot!"
 #sudo reboot
