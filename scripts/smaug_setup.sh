@@ -3,7 +3,7 @@
 SCRIPTS_DIR=scripts
 
 
-NUMBER_STEPS=6
+NUMBER_STEPS=7
 
 
 echo "Set up all smaug apps with SCRIPTS_DIR: ${SCRIPTS_DIR} in ${NUMBER_STEPS} steps !"
