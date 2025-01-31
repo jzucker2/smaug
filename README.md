@@ -110,3 +110,5 @@ To set the fan:
 ```
 sudo raspi-config
 ```
+
+Then activate fan and reboot.
