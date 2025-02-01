@@ -43,6 +43,7 @@ wlan0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
 Need to create a file at `/etc/environment` containing the followinfg for health checks:
 
 ```
+TZ=America/Los_Angeles
 # The SMAUG_DHCP_IP should be whatever your ethernet port is
 SMAUG_DHCP_IP=10.0.1.111
 ZIGBEE_USB_DONGLE_PORT=/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_fcdb20559e9ced11a9aa77faa7669f5d-if00-port0
