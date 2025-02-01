@@ -43,6 +43,7 @@ wlan0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
 Need to create a file at `/etc/environment` containing the followinfg for health checks:
 
 ```
+# Could also use America/New_York or America/Chicago or America/Denver
 TZ=America/Los_Angeles
 # The SMAUG_DHCP_IP should be whatever your ethernet port is
 SMAUG_DHCP_IP=10.0.1.111
