@@ -114,3 +114,5 @@ sudo raspi-config
 ```
 
 Then activate fan and reboot.
+
+## Set Up Hass Stuff
