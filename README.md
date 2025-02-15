@@ -156,9 +156,10 @@ Then follow steps here to set up the actual integration: [Set up Steps](https://
 
 #### Useful Integrations
 
-* https://github.com/jzucker2/bart-rt
+* https://github.com/jzucker2/bart-realtime
 * https://github.com/frenck/spook
 * https://github.com/zachowj/hass-node-red
+* https://github.com/piitaya/lovelace-mushroom
 
 ### Set up Node-RED
 
