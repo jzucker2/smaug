@@ -143,6 +143,13 @@ Then inside your container, run the HACS download script
 
 ```
 wget -O - https://get.hacs.xyz | bash -
+exit
+```
+
+Restart home assistant:
+
+```
+docker compose restart home-assistant
 ```
 
 #### Useful Integrations
