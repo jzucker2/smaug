@@ -160,6 +160,8 @@ Then follow steps here to set up the actual integration: [Set up Steps](https://
 * https://github.com/frenck/spook
 * https://github.com/zachowj/hass-node-red
 * https://github.com/piitaya/lovelace-mushroom
+* https://github.com/andrew-codechimp/HA-Battery-Notes
+* https://github.com/elax46/custom-brand-icons
 
 ### Set up Node-RED
 
