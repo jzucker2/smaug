@@ -125,8 +125,27 @@ So [HACS.xyz](https://hacs.xyz/) is super cool and useful. Especially with local
 
 #### Install
 
-It's very straightforward, [just start here](https://hacs.xyz/docs/setup/download)
+It's very straightforward, [just start here](https://hacs.xyz/docs/use/download/download/#to-download-hacs-container)
+
+First `ssh` into your pi:
+
+```
+ssh pi@smaug.local
+# go to this repo's directory
+cd smaug
+# check for container
+docker compose ps
+# exec into container
+docker compose exec -it home-assistant bash
+```
+
+Then inside your container, run the HACS download script
+
+```
+wget -O - https://get.hacs.xyz | bash -
+```
 
 #### Useful Integrations
 
 * https://github.com/jzucker2/bart-rt
+* https://github.com/frenck/spook
