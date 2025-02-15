@@ -152,6 +152,8 @@ Restart home assistant:
 docker compose restart home-assistant
 ```
 
+Then follow steps here to set up the actual integration: [Set up Steps](https://hacs.xyz/docs/use/configuration/basic/)
+
 #### Useful Integrations
 
 * https://github.com/jzucker2/bart-rt
