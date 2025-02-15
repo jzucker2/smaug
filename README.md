@@ -168,6 +168,8 @@ Relies on 2 parts:
 * https://github.com/zachowj/hass-node-red
 * https://github.com/zachowj/node-red-contrib-home-assistant-websocket
 
+[Docs are here](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/)
+
 ### Set up MQTT
 
 In `home-assistant` add the `mqtt` integration.
