@@ -170,6 +170,8 @@ Relies on 2 parts:
 
 [Docs are here](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/)
 
+URL: `http://host.docker.internal:8123`
+
 ### Set up MQTT
 
 In `home-assistant` add the `mqtt` integration.
