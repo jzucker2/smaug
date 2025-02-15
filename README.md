@@ -119,6 +119,14 @@ Then activate fan and reboot.
 
 Log in and create user.
 
-### Install HACS
+### Set Up HACS
 
+So [HACS.xyz](https://hacs.xyz/) is super cool and useful. Especially with local-tuya
 
+#### Install
+
+It's very straightforward, [just start here](https://hacs.xyz/docs/setup/download)
+
+#### Useful Integrations
+
+* https://github.com/jzucker2/bart-rt
