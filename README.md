@@ -114,3 +114,19 @@ sudo raspi-config
 ```
 
 Then activate fan and reboot.
+
+## Set Up Hass Stuff
+
+Log in and create user.
+
+### Set Up HACS
+
+So [HACS.xyz](https://hacs.xyz/) is super cool and useful. Especially with local-tuya
+
+#### Install
+
+It's very straightforward, [just start here](https://hacs.xyz/docs/setup/download)
+
+#### Useful Integrations
+
+* https://github.com/jzucker2/bart-rt
