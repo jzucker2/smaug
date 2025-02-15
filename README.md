@@ -149,3 +149,11 @@ wget -O - https://get.hacs.xyz | bash -
 
 * https://github.com/jzucker2/bart-rt
 * https://github.com/frenck/spook
+* https://github.com/zachowj/hass-node-red
+
+### Set up Node-RED
+
+Relies on 2 parts:
+
+* https://github.com/zachowj/hass-node-red
+* https://github.com/zachowj/node-red-contrib-home-assistant-websocket
