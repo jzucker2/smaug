@@ -115,6 +115,21 @@ sudo raspi-config
 
 Then activate fan and reboot.
 
+## Useful Home Assistant Integrations
+
+* AirNow
+* National Weather Service
+* Apple WeatherKit
+* Version
+* Uptime
+* Workday
+* Holiday
+* System Monitor
+* Raspberry Pi Power Supply Checker
+* Hue
+* Apple TV
+* Google Chromecast
+
 ## Set Up Hass Stuff
 
 Log in and create user.
