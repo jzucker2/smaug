@@ -178,7 +178,8 @@ services:
       - "${DOCKER_LOCALHOST}:host-gateway"
     environment:
       - TZ=${TZ}
-      - WEBPASSWORD=${PIHOLE_PASSWORD}
+      - FTLCONF_webserver_api_password=${PIHOLE_PASSWORD}
+      - FTLCONF_webserver_port=${PIHOLE_EXTERNAL_PORT}
     # Volumes store your data between container upgrades
     volumes:
       - ${DATADIR}/pihole/config/etc-pihole:/etc/pihole
