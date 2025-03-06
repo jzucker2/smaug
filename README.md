@@ -114,3 +114,85 @@ sudo raspi-config
 ```
 
 Then activate fan and reboot.
+
+## Useful Home Assistant Integrations
+
+* AirNow
+* National Weather Service
+* Apple WeatherKit
+* Version
+* Uptime
+* Workday
+* Holiday
+* System Monitor
+* Raspberry Pi Power Supply Checker
+* Hue
+* Apple TV
+* Google Chromecast
+
+## Set Up Hass Stuff
+
+Log in and create user.
+
+### Set Up HACS
+
+So [HACS.xyz](https://hacs.xyz/) is super cool and useful. Especially with local-tuya
+
+#### Install
+
+It's very straightforward, [just start here](https://hacs.xyz/docs/use/download/download/#to-download-hacs-container)
+
+First `ssh` into your pi:
+
+```
+ssh pi@smaug.local
+# go to this repo's directory
+cd smaug
+# check for container
+docker compose ps
+# exec into container
+docker compose exec -it home-assistant bash
+```
+
+Then inside your container, run the HACS download script
+
+```
+wget -O - https://get.hacs.xyz | bash -
+exit
+```
+
+Restart home assistant:
+
+```
+docker compose restart home-assistant
+```
+
+Then follow steps here to set up the actual integration: [Set up Steps](https://hacs.xyz/docs/use/configuration/basic/)
+
+#### Useful Integrations
+
+* https://github.com/jzucker2/bart-realtime
+* https://github.com/frenck/spook
+* https://github.com/zachowj/hass-node-red
+* https://github.com/piitaya/lovelace-mushroom
+* https://github.com/andrew-codechimp/HA-Battery-Notes
+* https://github.com/elax46/custom-brand-icons
+
+### Set up Node-RED
+
+Relies on 2 parts:
+
+* https://github.com/zachowj/hass-node-red
+* https://github.com/zachowj/node-red-contrib-home-assistant-websocket
+
+[Docs are here](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/)
+
+URL: `http://host.docker.internal:8123`
+
+### Set up MQTT
+
+In `home-assistant` add the `mqtt` integration.
+
+broker: `host.docker.internal`
+port: `1883`
+user/pass from `/etc/environment` file
