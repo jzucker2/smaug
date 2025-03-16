@@ -196,3 +196,24 @@ In `home-assistant` add the `mqtt` integration.
 broker: `host.docker.internal`
 port: `1883`
 user/pass from `/etc/environment` file
+
+## Optional bash
+
+```
+#!/bin/bash
+
+# Define environment variable (uncomment to set manually)
+# export RUN_MODE="option1"  
+
+# Check the value of RUN_MODE and execute the corresponding command
+if [[ "$RUN_MODE" == "option1" ]]; then
+    echo "Running command for option1..."
+    ls -l  # Replace with your actual command
+elif [[ "$RUN_MODE" == "option2" ]]; then
+    echo "Running command for option2..."
+    df -h  # Replace with your actual command
+else
+    echo "RUN_MODE is not set or invalid. Please set RUN_MODE to 'option1' or 'option2'."
+    exit 1
+fi
+```
