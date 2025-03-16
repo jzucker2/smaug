@@ -2,6 +2,8 @@
 
 Simple home automation template.
 
+Maybe make z2m optional?
+
 ```
 git clone https://github.com/jzucker2/smaug
 ```
