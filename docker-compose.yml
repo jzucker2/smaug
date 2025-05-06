@@ -176,6 +176,16 @@ services:
     restart: unless-stopped
     extra_hosts:
       - "${DOCKER_LOCALHOST}:host-gateway"
+    # 	RAM shortage (/dev/shm) ahead: 99% used
+    # /dev/shm: 268.1MB used, 268.4MB total, FTL uses 268.1MB
+    # Set the shared memory size to 1G
+    # Resizing "FTL-queries" from 1007648768 to (17997824 * 56) == 1007878144 (/dev/shm: 1.0GB used, 1.1GB total, FTL uses 1.0GB)
+    # WARNING: RAM shortage (/dev/shm) ahead: 93% is used (/dev/shm: 1.0GB used, 1.1GB total, FTL uses 1.0GB)
+    # add_message(type=7, message=/dev/shm) - SQL error step DELETE: database is locked
+    # Error while trying to close database: database is locked
+    # Resizing "FTL-queries" from 1007878144 to (18001920 * 56) == 1008107520 (/dev/shm: 1.0GB used, 1.1GB total, FTL uses 1.0GB)
+    # WARNING: RAM shortage (/dev/shm) ahead: 93% is used (/dev/shm: 1.0GB used, 1.1GB total, FTL uses 1.0GB)
+    shm_size: "${PIHOLE_SHM_SIZE}"
     environment:
       - TZ=${TZ}
       - FTLCONF_webserver_api_password=${PIHOLE_PASSWORD}
