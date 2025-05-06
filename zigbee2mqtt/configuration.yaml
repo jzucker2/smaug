@@ -10,6 +10,7 @@ serial:
   port: /dev/ttyUSB0
 
 homeassistant:
+  enabled: true
   # Optional: Home Assistant discovery topic (default: shown below)
   discovery_topic: 'homeassistant'
   # Optional: Home Assistant status topic (default: shown below)
@@ -41,6 +42,12 @@ advanced:
   # true = online/offline
   # false = {"state":"online"} / {"state":"offline"}
   legacy_availability_payload: false
+
+# https://github.com/Koenkk/zigbee2mqtt.io/blob/dev/docs/guide/configuration/device-availability.md
+# Optional: Availability feature
+availability:
+    # Enable the feature (default: false)
+    enabled: true
 
 # https://www.zigbee2mqtt.io/guide/configuration/devices-groups.html
 device_options:
