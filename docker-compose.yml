@@ -39,7 +39,7 @@ services:
   home-assistant-postgres:
     container_name: home-assistant-postgres
     labels:
-      - wud.tag.include=${WUD_LINUX_BASE_MINOR_SEMVAR_INCLUDE_LABEL}
+      - wud.tag.include=${WUD_LINUX_BASE_17_MINOR_SEMVAR_INCLUDE_LABEL}
       - wud.link.template=https://www.postgresql.org/docs/release/$${major}.$${minor}/
     image: postgres:${POSTGRES_TAG}
     restart: always
@@ -83,7 +83,7 @@ services:
       - "${DOCKER_LOCALHOST}:host-gateway"
     ports:
       - ${MOSQUITTO_EXTERNAL_PORT}:1883
-      - "9001:9001"  # not sure I'm even using this port
+      - ${MOSQUITTO_WEBSOCKETS_EXTERNAL_PORT}:9001
     volumes:
       - ${DATADIR}/mosquitto/config:/mosquitto/config
       - ${DATADIR}/mosquitto/data:/mosquitto/data

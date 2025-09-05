@@ -196,3 +196,22 @@ In `home-assistant` add the `mqtt` integration.
 broker: `host.docker.internal`
 port: `1883`
 user/pass from `/etc/environment` file
+
+## Set up ZigBee2MQTT Devices
+
+Create a file at `/dockerData/zigbee2mqtt/config/devices.yaml ` with the following:
+
+```
+# optionally create file:
+vi /dockerData/zigbee2mqtt/config/devices.yaml
+```
+
+Then in file, fill in devices:
+
+```
+# https://www.zigbee2mqtt.io/guide/configuration/devices-groups.html
+devices:
+  '0x00158d00090d9eaa':
+    friendly_name: 'Magic Cube'
+    description: 'This is an Aqara Magic Cube'
+```

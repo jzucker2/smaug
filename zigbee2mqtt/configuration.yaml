@@ -1,7 +1,10 @@
 # Enable the Zigbee2MQTT frontend
 frontend:
+  enabled: true
   # Optional, default 8080
   port: 8080
+  # Experimental new frontend, see: https://github.com/Koenkk/zigbee2mqtt/releases/tag/2.4.0
+  package: zigbee2mqtt-windfront
 
 serial:
   # https://github.com/Koenkk/zigbee2mqtt/discussions/24364
@@ -42,16 +45,33 @@ advanced:
   # true = online/offline
   # false = {"state":"online"} / {"state":"offline"}
   legacy_availability_payload: false
+  # https://www.zigbee2mqtt.io/guide/configuration/mqtt.html#mqtt-behaviour
+  # Optional: state caching, MQTT message payload will contain all attributes, not only changed ones.
+  # Has to be true when integrating via Home Assistant (default: true)
+  cache_state: true
+  # Optional: persist cached state, only used when cache_state: true (default: true)
+  cache_state_persistent: true
+  # Optional: send cached state on startup, only used when cache_state_persistent: true (default: true)
+  cache_state_send_on_startup: true
+  # Optional: Add a last_seen attribute to MQTT messages, contains date/time of last Zigbee message
+  # possible values are: disable (default), ISO_8601, ISO_8601_local, epoch (default: disable)
+  last_seen: 'ISO_8601_local'
+  # Optional: Add an elapsed attribute to MQTT messages, contains milliseconds since the previous msg (default: false)
+  elapsed: true
 
 # https://github.com/Koenkk/zigbee2mqtt.io/blob/dev/docs/guide/configuration/device-availability.md
 # Optional: Availability feature
 availability:
-    # Enable the feature (default: false)
-    enabled: true
+  # Enable the feature (default: false)
+  enabled: true
 
 # https://www.zigbee2mqtt.io/guide/configuration/devices-groups.html
 device_options:
   legacy: false
+  state_action: true
+
+# https://www.zigbee2mqtt.io/guide/configuration/devices-groups.html#extract-config-to-separate-files
+devices: devices.yaml
 
 devices:
   '0x00158d00090d9eaa':

@@ -10,12 +10,10 @@ DEPLOY_BRANCH="master"
 #DEPLOY_BRANCH=$DEV_BRANCH
 
 ZIGBEE2MQTT_CONFIG_FILE="configuration.yaml"
-ZIGBEE2MQTT_DEVICES_FILE="devices.yaml"
 
 ZIGBEE2MQTT_BASE_DIR="${DATADIR}/zigbee2mqtt"
 ZIGBEE2MQTT_DIR="${ZIGBEE2MQTT_BASE_DIR}/config"
 ZIGBEE2MQTT_CONFIG_PATH="${ZIGBEE2MQTT_DIR}/${ZIGBEE2MQTT_CONFIG_FILE}"
-ZIGBEE2MQTT_DEVICES_PATH="${ZIGBEE2MQTT_DIR}/${ZIGBEE2MQTT_DEVICES_FILE}"
 
 echo "Replace zigbee2mqtt config at DATADIR: ${DATADIR} with final ZIGBEE2MQTT_CONFIG_PATH: ${ZIGBEE2MQTT_CONFIG_PATH} in ${NUMBER_STEPS} steps using DEPLOY_BRANCH: ${DEPLOY_BRANCH} !"
 
@@ -27,17 +25,16 @@ docker compose down
 
 echo "[3/${NUMBER_STEPS}] remove existing zigbee2mqtt configs"
 sudo rm ${ZIGBEE2MQTT_CONFIG_PATH}
-sudo rm ${ZIGBEE2MQTT_DEVICES_PATH}
 
 echo "[4/${NUMBER_STEPS}] put back zigbee2mqtt configs"
 sudo cp "zigbee2mqtt/${ZIGBEE2MQTT_CONFIG_FILE}" ${ZIGBEE2MQTT_CONFIG_PATH}
-sudo cp "zigbee2mqtt/${ZIGBEE2MQTT_DEVICES_FILE}" ${ZIGBEE2MQTT_DEVICES_PATH}
 
 echo "Read out config at ZIGBEE2MQTT_CONFIG_PATH: ${ZIGBEE2MQTT_CONFIG_PATH}"
 sudo cat ${ZIGBEE2MQTT_CONFIG_PATH}
 echo ""
-echo "Read out config at ZIGBEE2MQTT_DEVICES_PATH: ${ZIGBEE2MQTT_DEVICES_PATH}"
-sudo cat ${ZIGBEE2MQTT_DEVICES_PATH}
+# Skip devices while it's manually maintained outside the repo
+# echo "Read out config at ZIGBEE2MQTT_DEVICES_PATH: ${ZIGBEE2MQTT_DEVICES_PATH}"
+# sudo cat ${ZIGBEE2MQTT_DEVICES_PATH}
 
 echo "[5/${NUMBER_STEPS}] now ensure proper permissions on newly replaced files"
 #sudo chown 1000:1000 "${ZIGBEE2MQTT_DIR}"
