@@ -72,13 +72,3 @@ device_options:
 
 # https://www.zigbee2mqtt.io/guide/configuration/devices-groups.html#extract-config-to-separate-files
 devices: devices.yaml
-
-devices:
-  '0x00158d00090d9eaa':
-    friendly_name: Magic Cube
-    description: This is an Aqara Magic Cube
-
-# does not seem to work though
-# https://www.zigbee2mqtt.io/guide/configuration/devices-groups.html#extract-config-to-separate-files
-# Define the files which contains the configs
-#devices: 'devices.yaml'
