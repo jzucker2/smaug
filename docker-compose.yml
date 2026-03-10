@@ -39,7 +39,7 @@ services:
   home-assistant-postgres:
     container_name: home-assistant-postgres
     labels:
-      - wud.tag.include=${WUD_LINUX_BASE_MINOR_SEMVAR_INCLUDE_LABEL}
+      - wud.tag.include=${WUD_LINUX_BASE_17_MINOR_SEMVAR_INCLUDE_LABEL}
       - wud.link.template=https://www.postgresql.org/docs/release/$${major}.$${minor}/
     image: postgres:${POSTGRES_TAG}
     restart: always
@@ -83,7 +83,7 @@ services:
       - "${DOCKER_LOCALHOST}:host-gateway"
     ports:
       - ${MOSQUITTO_EXTERNAL_PORT}:1883
-      - "9001:9001"  # not sure I'm even using this port
+      - ${MOSQUITTO_WEBSOCKETS_EXTERNAL_PORT}:9001
     volumes:
       - ${DATADIR}/mosquitto/config:/mosquitto/config
       - ${DATADIR}/mosquitto/data:/mosquitto/data
@@ -176,6 +176,16 @@ services:
     restart: unless-stopped
     extra_hosts:
       - "${DOCKER_LOCALHOST}:host-gateway"
+    # 	RAM shortage (/dev/shm) ahead: 99% used
+    # /dev/shm: 268.1MB used, 268.4MB total, FTL uses 268.1MB
+    # Set the shared memory size to 1G
+    # Resizing "FTL-queries" from 1007648768 to (17997824 * 56) == 1007878144 (/dev/shm: 1.0GB used, 1.1GB total, FTL uses 1.0GB)
+    # WARNING: RAM shortage (/dev/shm) ahead: 93% is used (/dev/shm: 1.0GB used, 1.1GB total, FTL uses 1.0GB)
+    # add_message(type=7, message=/dev/shm) - SQL error step DELETE: database is locked
+    # Error while trying to close database: database is locked
+    # Resizing "FTL-queries" from 1007878144 to (18001920 * 56) == 1008107520 (/dev/shm: 1.0GB used, 1.1GB total, FTL uses 1.0GB)
+    # WARNING: RAM shortage (/dev/shm) ahead: 93% is used (/dev/shm: 1.0GB used, 1.1GB total, FTL uses 1.0GB)
+    shm_size: "${PIHOLE_SHM_SIZE}"
     environment:
       - TZ=${TZ}
       - FTLCONF_webserver_api_password=${PIHOLE_PASSWORD}
